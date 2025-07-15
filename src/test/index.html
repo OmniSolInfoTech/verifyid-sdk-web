@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VerifyID KYC Wizard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/jquery-steps@1.1.0/demo/css/jquery.steps.css" rel="stylesheet" />
+  <link rel="stylesheet" href="verifyid-sdk.css" />
+</head>
+<body>
+
+<div class="container mt-5">
+  <img src="./images/your_logo.png" alt="" height="80">
+  <form id="kyc-wizard-form" enctype="multipart/form-data">
+    <div id="kyc-wizard">
+
+      <h3></h3>
+      <section>
+        <h3>Welcome to the<br/>KYC (Know Your Customer)
+          process.</h3>
+        <p class="card-title-desc">
+        </p>
+        <p>We need to get to know you a little
+          better!<br/><br/>
+
+          So this process will verify your identity against a government issued
+          Identity Document.<br/>
+        <ul class="list-unstyled mb-0">
+          <li><strong>Please make sure you have the following documents
+            available.</strong>
+            <ul>
+              <li>ID Card, Driver's License or a Passport.</li>
+              <li>Also be prepared to take a selfie.</li>
+            </ul>
+          </li>
+        </ul>
+        </p>
+        <br/><br/>
+      </section>
+      <h3></h3>
+      <section>
+        <h3> Identity Document</h3>
+        <p class="card-title-desc">
+          Please select the type of identity document you will be using.
+        </p>
+        <div>
+
+          <div class="row">
+            <div class="col-7">
+              <div class="mt-4">
+                <div class="form-check mb-3">
+                  <i class="fas fa-id-card fa-2x"></i>
+                  <input class="form-check-input identity_document_type"
+                         type="radio"
+                         name="identity_document_type"
+                         id="id_card"
+                         value="id_card"/>
+                  <label class="form-check-label"
+                         for="id_card">
+                    ID Card/Driver's License
+                  </label>
+                </div>
+                <div class="form-check mb-3">
+                  <i class="fas fa-passport fa-2x"></i>
+                  <input class="form-check-input identity_document_type"
+                         type="radio"
+                         name="identity_document_type"
+                         id="passport"
+                         value="passport"/>
+                  <label class="form-check-label"
+                         for="passport">
+                    Passport
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <h3></h3>
+      <section>
+        <h3> Identity Document Upload</h3>
+        <p class="card-title-desc">
+          Please upload an image of your Identity Document as demonstrated below.
+        </p>
+        <br/>
+        <div class="row id_card_div" style="display: none;">
+          <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 text-center">
+              <label>
+                Front of ID Card/Driver's License<br/>
+                <img src="./images/id-guide-front.jpg"
+                     style="width: 30%"/>
+              </label>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 text-center vertical-center">
+              <input name="id_card_front" id="id_card_front" type="file"
+                     class="btn btn-primary"
+                     accept="image/*">
+            </div>
+          </div>
+        </div>
+        <div class="row id_card_div" style="display: none;">
+          <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 text-center">
+              <label>
+                Back of ID Card<br/>
+                <img src="./images/id-guide-back.jpg"
+                     style="width: 30%"/>
+              </label>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 text-center vertical-center">
+              <input name="id_card_back" id="id_card_back" type="file"
+                     class="btn btn-primary"
+                     accept="image/*">
+            </div>
+          </div>
+        </div>
+        <div class="row" id="passport_div" style="display: none;">
+          <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 text-center">
+              <label>
+                Passport Information Page<br/>
+                <img src="./images/passport-guide.jpg"
+                     style="width: 30%"/>
+              </label>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 text-center vertical-center">
+              <input name="passport" id="passport_front" type="file"
+                     class="btn btn-primary"
+                     accept="image/*">
+            </div>
+          </div>
+        </div>
+      </section>
+      <h3></h3>
+      <section class="text-center">
+        <div class="container1">
+
+          <div class="app">
+            <button class="btn btn-sm btn-primary visible" id="start-camera">Click
+              to Start Camera
+            </button>
+            <video id="camera-stream"
+                   autoPlay="true"
+                   playsInline="true"
+                   muted="true"
+                   ref="videoRef"></video>
+            <img id="snap">
+
+            <p id="error-message"></p>
+
+            <div class="controls">
+              <h3 style="text-align: center; z-index: 9999; width: 95%;"
+                  class="text-primary" id="help_message"></h3>
+              <img id="overlay" src="./images/center_head.png"/>
+            </div>
+
+            <!-- Hidden canvas element. Used for taking snapshot of video. -->
+            <canvas id="output"></canvas>
+          </div>
+
+        </div>
+      </section>
+      <h3></h3>
+      <section>
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="text-center">
+              <div class="mb-4">
+                <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+              </div>
+              <div>
+                <h4>Great! Looks like we have all we need to verify you.</h4>
+                <p class="text-muted">Please be patient and our support team
+                  will be right with you.</p>
+              </div>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+            </div>
+          </div>
+        </div>
+      </section>
+      <br/>
+      <br/>
+      <button type="submit" id="submitForm" style="display:none;"></button>
+    </div>
+  </form>
+</div>
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-steps@1.1.0/build/jquery.steps.min.js"></script>
+<!-- jquery step -->
+<script src="face-api/face-api.min.js"></script>
+<script src="verifyid-sdk.js"></script>
+<script src="config.js"></script>
+
+</body>
+</html>

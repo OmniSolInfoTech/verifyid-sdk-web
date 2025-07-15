@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VerifyID Web SDK Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap & Prism.js for code highlighting -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background: #f8fafb;
+            font-family: 'Open Sans', Arial, sans-serif;
+            color: #2a323c;
+        }
+        .brand-header {
+            background: #2196f3;
+            color: #fff;
+            padding: 2rem 0 1.5rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+        }
+        .brand-header img {
+            height: 50px;
+            margin-bottom: 0.5rem;
+        }
+        h2 { margin-top: 2.5rem; }
+        pre { border-radius: 0.6rem; }
+        .step-badge {
+            background: #2196f3;
+            color: #fff;
+            border-radius: 2rem;
+            display: inline-block;
+            width: 2.2rem;
+            height: 2.2rem;
+            line-height: 2.2rem;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 0.7rem;
+        }
+        .section-card {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.06);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .brand-accent { color: #2196f3; }
+        code { background: #e3eefb; color: #10568d; }
+        .footer { color: #999; font-size: 0.96em; text-align: center; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+<div class="brand-header">
+    <img src="./images/your_logo.png" alt="VerifyID Logo"/>
+    <h1 class="fw-bold mb-0">VerifyID Web SDK</h1>
+    <p class="lead mb-0">KYC, Document, Liveness & Deepfake Verification SDK</p>
+</div>
+
+<div class="container">
+    <!-- Introduction -->
+    <div class="section-card">
+        <h2><span class="step-badge">1</span>Introduction</h2>
+        <p>
+            The <b>VerifyID Web SDK</b> makes it easy to add secure, compliant KYC (Know Your Customer), government document upload, and liveness/selfie verification to your website with a single integration.
+        </p>
+        <ul>
+            <li>Supports ID Cards, Passports, Driver’s Licenses</li>
+            <li>Face Match & Passive Liveness Detection</li>
+            <li>Seamless API integration – no backend code required!</li>
+        </ul>
+    </div>
+
+    <!-- Installation -->
+    <div class="section-card">
+        <h2><span class="step-badge">2</span>Installation</h2>
+        <ol>
+            <li>
+                <b>Download the SDK files</b> (or get them from your VerifyID account manager):
+                <ul>
+                    <li><code>verifyid-sdk.zip</code> <small>(Full code)</small></li>
+                    <li><code>verifyid-sdk.js</code> <small>(JavaScript logic)</small></li>
+                    <li><code>verifyid-sdk.css</code> <small>(Styling)</small></li>
+                    <li><code>config.js</code> <small>(API key/configuration)</small></li>
+                    <li>Copy required <code>face-api.js</code> models and images folders as instructed</li>
+                </ul>
+            </li>
+            <li>
+                <b>Include them in your HTML:</b>
+                <pre><code class="language-html">&lt;!-- In your &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="assets/css/verifyid-sdk.css"&gt;
+
+&lt;!-- Before &lt;/body&gt; --&gt;
+&lt;script src="face-api/face-api.min.js"&gt;&lt;/script&gt;
+&lt;script src="assets/js/config.js"&gt;&lt;/script&gt;
+&lt;script src="assets/js/verifyid-sdk.js"&gt;&lt;/script&gt;
+</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <!-- Setup -->
+    <div class="section-card">
+        <h2><span class="step-badge">3</span>Setup & Configuration</h2>
+        <ol>
+            <li>
+                <b>Place the KYC Wizard in your HTML:</b>
+                <pre><code class="language-html">&lt;form id="kyc-wizard-form"&gt;
+  &lt;div id="kyc-wizard"&gt;
+    &lt;!-- SDK will handle steps dynamically --&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
+            </li>
+            <li>
+                <b>Configure your API Key &amp; endpoint</b> in <code>config.js</code>:
+                <pre><code class="language-js">window.SDK_CONFIG = {
+  endpoint: "https://api.verifyid.io/kyc/full_verification",
+  api_key: "YOUR_API_KEY_HERE",
+  // threshold: 0.6 (optional, default 0.6)
+};
+</code></pre>
+            </li>
+            <li>
+                <b>Ensure the required Face API models</b> are available under <code>sdk/face-api/models/</code> as provided in your SDK package.
+            </li>
+        </ol>
+    </div>
+
+    <!-- Usage -->
+    <div class="section-card">
+        <h2><span class="step-badge">4</span>Usage</h2>
+        <ol>
+            <li>
+                <b>User launches the KYC wizard</b> and follows the prompts:
+                <ul>
+                    <li>Selects document type</li>
+                    <li>Uploads document images (front/back or passport)</li>
+                    <li>Takes a selfie via the webcam, guided by the UI</li>
+                </ul>
+            </li>
+            <li>
+                <b>On submission:</b>
+                <ul>
+                    <li>All images are converted to base64 and sent securely to the API endpoint</li>
+                    <li>The API key is passed via the <code>x-api-key</code> header</li>
+                    <li>
+                        SweetAlert modal will show <b>“Processing...”</b> and then display success/error once a response is received.
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        <pre><code class="language-js">// Example submission (handled by SDK)
+fetch(window.SDK_CONFIG.endpoint, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': window.SDK_CONFIG.api_key
+  },
+  body: JSON.stringify({
+    front_image: "...base64...",
+    back_image: "...base64...",
+    selfie_image: "...base64...",
+    threshold: 0.6
+  })
+})
+.then(res =&gt; res.json())
+.then(data =&gt; {
+  // Display results
+});
+</code></pre>
+    </div>
+
+    <!-- API Response -->
+    <div class="section-card">
+        <h2><span class="step-badge">5</span>API Response</h2>
+        <p>
+            The API returns a JSON object indicating the verification result.<br>
+            <b>Sample response:</b>
+        </p>
+        <pre><code class="language-json">{
+  "success": true,
+  "face_match_score": 0.9842,
+  "liveness_passed": true,
+  "document_data": {
+    "full_name": "John Doe",
+    "document_number": "1234567890"
+    // ...other extracted fields
+  },
+  "message": "Verification complete"
+}
+</code></pre>
+        <p>
+            <b>Display the results to your user or process as needed.</b>
+        </p>
+    </div>
+
+    <!-- Support -->
+    <div class="section-card">
+        <h2><span class="step-badge">6</span>Support</h2>
+        <ul>
+            <li><b>Documentation &amp; Updates:</b> <a href="https://verifyid.io" target="_blank">https://verifyid.io</a></li>
+            <li><b>Email:</b> support@verifyid.io</li>
+            <li><b>Integration Help:</b> Please contact your VerifyID technical account manager</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 VerifyID.io – Secure Identity & KYC Automation
+    </div>
+</div>
+
+<!-- Prism.js for code syntax highlighting -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

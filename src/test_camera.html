@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #camera-stream { width: 100vw; height: 60vh; background: red; }
+    </style>
+</head>
+<body>
+<video id="camera-stream" autoplay playsinline muted></video>
+<script>
+    const video = document.getElementById('camera-stream');
+    navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        .then(stream => {
+            video.srcObject = stream;
+            video.onloadedmetadata = () => video.play();
+        })
+        .catch(err => alert('Camera error: ' + err));
+</script>
+</body>
+</html>
